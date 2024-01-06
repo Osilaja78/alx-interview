@@ -4,6 +4,7 @@ This module contains a code that returns a pascal's
 triangle based on n.
 """
 
+
 def pascal_triangle(n):
     if n <= 0:
         return []
