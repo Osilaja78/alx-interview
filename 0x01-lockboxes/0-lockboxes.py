@@ -5,7 +5,10 @@ Lockboxes solution.
 
 
 def canUnlockAll(boxes):
-    """This method determines if all the boxes can be opened"""
+    """
+    This method determines if all the
+    boxes can be opened
+    """
 
     visited = set()
 
