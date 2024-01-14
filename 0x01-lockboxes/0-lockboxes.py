@@ -13,6 +13,8 @@ def canUnlockAll(boxes):
     visited = set()
 
     def dfs(box):
+        """Helper method"""
+
         visited.add(box)
 
         for key in boxes[box]:
