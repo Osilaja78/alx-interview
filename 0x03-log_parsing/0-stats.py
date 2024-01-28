@@ -1,54 +1,54 @@
 #!/usr/bin/python3
-"""0-stats.py module"""
 
 import sys
-from typing import Tuple
 
 
-def print_statistics(total_size: int, status_codes: int) -> None:
-    """Prints file size and status code to stdout"""
+def print_line(dict_sc, total_file_size):
+    """
+    Method to print
+    Args:
+        dict_sc: dict of status codes
+        total_file_size: total of the file
+    Returns:
+        Nothing
+    """
 
-    print(f"File size: {total_size}")
-    for code, count in sorted(status_codes.items()):
-        if count != 0:
-            print(f"{code}: {count}")
-
-
-def parse_line(line: str) -> Tuple[int, int]:
-    """Parses lines from stdin to get status codes and file sizes"""
-
-    parts = line.split()
-    parts = parts[::-1]
-    # print(parts)
-    if len(parts) < 2:
-        return None
-
-    file_size = parts[0]
-    status_code = parts[1]
-
-    if not status_code.isdigit():
-        return None
-    return int(status_code), int(file_size)
+    print("File size: {}".format(total_file_size))
+    for key, val in sorted(dict_sc.items()):
+        if val != 0:
+            print("{}: {}".format(key, val))
 
 
-total_size = 0
-status_codes = {
-    200: 0, 301: 0, 400: 0,
-    401: 0, 403: 0, 404: 0,
-    405: 0, 500: 0
-}
-line_count = 0
+total_file_size = 0
+code = 0
+counter = 0
+dict_sc = {"200": 0,
+           "301": 0,
+           "400": 0,
+           "401": 0,
+           "403": 0,
+           "404": 0,
+           "405": 0,
+           "500": 0}
 
 try:
-    for line in sys.stdin:
-        parsed = parse_line(line)
-        if parsed:
-            code, size = parsed
-            total_size += size
-            if code in status_codes.keys():
-                status_codes[code] += 1
-            line_count += 1
-            if line_count % 10 == 0:
-                print_statistics(total_size, status_codes)
-except KeyboardInterrupt:
-    print_statistics(total_size, status_codes)
+    for lines in sys.stdin:
+        line = lines.split()
+        line = line[::-1]
+
+        if len(line) > 2:
+            counter += 1
+
+            if counter <= 10:
+                total_file_size += int(line[0])
+                code = line[1]
+
+                if (code in dict_sc.keys()):
+                    dict_sc[code] += 1
+
+            if (counter == 10):
+                print_line(dict_sc, total_file_size)
+                counter = 0
+
+finally:
+    print_line(dict_sc, total_file_size)
