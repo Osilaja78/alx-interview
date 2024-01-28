@@ -17,15 +17,20 @@ def parse_line(line: str) -> Tuple[str, int, int]:
     """Parses lines from stdin to get status codes and file sizes"""
 
     parts = line.strip().split()
-    if len(parts) != 10 or parts[8] != '"GET' or parts[9] != '/projects/260':
+
+    if len(parts) != 9 or parts[4] != '"GET' or parts[5] != '/projects/260':
         return None
-    ip, _, _, date, _, status_code, file_size = parts[:7]
+
+    ip = parts[0]
+    status_code = parts[7]
+    file_size = parts[8]
+
     if not status_code.isdigit():
         return None
     return ip, int(status_code), int(file_size)
 
 
-def main() -> None:
+def main():
     """Main function, calls both helper functions"""
 
     total_size = 0
@@ -48,3 +53,7 @@ def main() -> None:
                     print_statistics(total_size, status_codes)
     except KeyboardInterrupt:
         print_statistics(total_size, status_codes)
+
+
+if __name__ == "__main__":
+    main()
