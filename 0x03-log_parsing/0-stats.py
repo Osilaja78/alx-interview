@@ -17,13 +17,14 @@ def print_statistics(total_size: int, status_codes: int) -> None:
 def parse_line(line: str) -> Tuple[int, int]:
     """Parses lines from stdin to get status codes and file sizes"""
 
-    parts = line.strip().split()
-
-    if len(parts) != 9 or parts[4] != '"GET' or parts[5] != '/projects/260':
+    parts = line.split()
+    parts = parts[::-1]
+    # print(parts)
+    if len(parts) < 2:
         return None
 
-    status_code = parts[7]
-    file_size = parts[8]
+    file_size = parts[0]
+    status_code = parts[1]
 
     if not status_code.isdigit():
         return None
