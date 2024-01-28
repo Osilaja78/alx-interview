@@ -1,11 +1,17 @@
 #!/usr/bin/python3
+"""0-stats.py module"""
 
 import sys
+from typing import Dict, List
 
 
-def print_statistics(status_codes, total_size):
+def print_statistics(status_codes: Dict[str, int], total_size: int) -> None:
     """
     Prints both status_code and total_size
+    Args:
+        status_codes: dict of status codes
+        total_size: total file size
+    Return: nothing
     """
 
     print("File size: {}".format(total_size))
@@ -14,8 +20,13 @@ def print_statistics(status_codes, total_size):
             print("{}: {}".format(key, val))
 
 
-def parse_line(line):
-    """Parses each line of standard output"""
+def parse_line(line: str) -> List[str]:
+    """
+    Parses each line of standard output
+    Args:
+        line: parsed stdout line
+    Return: a list of string
+    """
 
     parts = line.split()
     parts = parts[::-1]
