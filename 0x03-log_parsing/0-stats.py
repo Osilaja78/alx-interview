@@ -10,7 +10,7 @@ def print_statistics(total_size: int, status_codes: int) -> None:
 
     print(f"File size: {total_size}")
     for code, count in sorted(status_codes.items()):
-        if count and count != 0:
+        if count != 0:
             print(f"{code}: {count}")
 
 
@@ -44,7 +44,8 @@ try:
         if parsed:
             code, size = parsed
             total_size += size
-            status_codes[code] += 1
+            if code in status_codes.keys():
+                status_codes[code] += 1
             line_count += 1
             if line_count % 10 == 0:
                 print_statistics(total_size, status_codes)
