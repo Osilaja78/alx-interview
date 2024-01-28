@@ -3,52 +3,48 @@
 import sys
 
 
-def print_line(dict_sc, total_file_size):
+def print_statistics(status_codes, total_size):
     """
-    Method to print
-    Args:
-        dict_sc: dict of status codes
-        total_file_size: total of the file
-    Returns:
-        Nothing
+    Prints both status_code and total_size
     """
 
-    print("File size: {}".format(total_file_size))
-    for key, val in sorted(dict_sc.items()):
+    print("File size: {}".format(total_size))
+    for key, val in sorted(status_codes.items()):
         if val != 0:
             print("{}: {}".format(key, val))
 
 
-total_file_size = 0
-code = 0
-counter = 0
-dict_sc = {"200": 0,
-           "301": 0,
-           "400": 0,
-           "401": 0,
-           "403": 0,
-           "404": 0,
-           "405": 0,
-           "500": 0}
+def parse_line(line):
+    """Parses each line of standard output"""
+
+    parts = line.split()
+    parts = parts[::-1]
+
+    return parts
+
+
+status_codes = {
+    "200": 0, "301": 0, "400": 0,
+    "401": 0, "403": 0, "404": 0,
+    "405": 0, "500": 0
+}
+total_size = 0
+line_count = 0
 
 try:
+    code = 0
     for lines in sys.stdin:
-        line = lines.split()
-        line = line[::-1]
+        parsed = parse_line(lines)
 
-        if len(line) > 2:
-            counter += 1
-
-            if counter <= 10:
-                total_file_size += int(line[0])
-                code = line[1]
-
-                if (code in dict_sc.keys()):
-                    dict_sc[code] += 1
-
-            if (counter == 10):
-                print_line(dict_sc, total_file_size)
-                counter = 0
-
-finally:
-    print_line(dict_sc, total_file_size)
+        if len(parsed) > 2:
+            line_count += 1
+            if line_count <= 10:
+                total_size += int(parsed[0])
+                code = parsed[1]
+                if (code in status_codes.keys()):
+                    status_codes[code] += 1
+            if (line_count == 10):
+                print_statistics(status_codes, total_size)
+                line_count = 0
+except KeyboardInterrupt:
+    print_statistics(status_codes, total_size)
