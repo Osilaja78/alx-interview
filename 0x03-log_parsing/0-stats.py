@@ -10,14 +10,15 @@ def print_statistics(total_size: int, status_codes: int) -> None:
 
     print(f"File size: {total_size}")
     for code, count in sorted(status_codes.items()):
-        print(f"{code}: {count}")
+        if count and count != 0:
+            print(f"{code}: {count}")
 
 
 def parse_line(line: str) -> Tuple[int, int]:
     """Parses lines from stdin to get status codes and file sizes"""
 
     parts = line.strip().split()
-    print(parts)
+
     if len(parts) != 9 or parts[4] != '"GET' or parts[5] != '/projects/260':
         return None
 
