@@ -13,21 +13,20 @@ def print_statistics(total_size: int, status_codes: int) -> None:
         print(f"{code}: {count}")
 
 
-def parse_line(line: str) -> Tuple[str, int, int]:
+def parse_line(line: str) -> Tuple[int, int]:
     """Parses lines from stdin to get status codes and file sizes"""
 
     parts = line.strip().split()
-
+    print(parts)
     if len(parts) != 9 or parts[4] != '"GET' or parts[5] != '/projects/260':
         return None
 
-    ip = parts[0]
     status_code = parts[7]
     file_size = parts[8]
 
     if not status_code.isdigit():
         return None
-    return ip, int(status_code), int(file_size)
+    return int(status_code), int(file_size)
 
 
 def main():
@@ -45,7 +44,7 @@ def main():
         for line in sys.stdin:
             parsed = parse_line(line)
             if parsed:
-                ip, code, size = parsed
+                code, size = parsed
                 total_size += size
                 status_codes[code] += 1
                 line_count += 1
