@@ -2,60 +2,53 @@
 """0-stats.py module"""
 
 import sys
-from typing import Dict, List
+from typing import Tuple
 
 
-def print_statistics(status_codes: Dict[str, int], total_size: int) -> None:
-    """
-    Prints both status_code and total_size
-    Args:
-        status_codes: dict of status codes
-        total_size: total file size
-    Return: nothing
-    """
+def print_statistics(total_size: int, status_codes: int) -> None:
+    """Prints file size and status code to stdout"""
 
-    print("File size: {}".format(total_size))
-    for key, val in sorted(status_codes.items()):
-        if val != 0:
-            print("{}: {}".format(key, val))
+    print(f"File size: {total_size}")
+    for code, count in sorted(status_codes.items()):
+        if count != 0:
+            print(f"{code}: {count}")
 
 
-def parse_line(line: str) -> List[str]:
-    """
-    Parses each line of standard output
-    Args:
-        line: parsed stdout line
-    Return: a list of string
-    """
+def parse_line(line: str) -> Tuple[int, int]:
+    """Parses lines from stdin to get status codes and file sizes"""
 
     parts = line.split()
     parts = parts[::-1]
 
-    return parts
+    if len(parts) < 2:
+        return None
+
+    file_size = parts[0]
+    status_code = parts[1]
+
+    if not status_code.isdigit():
+        return None
+    return int(status_code), int(file_size)
 
 
-status_codes = {
-    "200": 0, "301": 0, "400": 0,
-    "401": 0, "403": 0, "404": 0,
-    "405": 0, "500": 0
-}
 total_size = 0
+status_codes = {
+    200: 0, 301: 0, 400: 0,
+    401: 0, 403: 0, 404: 0,
+    405: 0, 500: 0
+}
 line_count = 0
 
 try:
-    code = 0
-    for lines in sys.stdin:
-        parsed = parse_line(lines)
-
-        if len(parsed) > 2:
+    for line in sys.stdin:
+        parsed = parse_line(line)
+        if parsed:
+            code, size = parsed
+            total_size += size
+            if code in status_codes.keys():
+                status_codes[code] += 1
             line_count += 1
-            if line_count <= 10:
-                total_size += int(parsed[0])
-                code = parsed[1]
-                if (code in status_codes.keys()):
-                    status_codes[code] += 1
-            if (line_count == 10):
-                print_statistics(status_codes, total_size)
-                line_count = 0
+            if line_count % 10 == 0:
+                print_statistics(total_size, status_codes)
 finally:
-    print_statistics(status_codes, total_size)
+    print_statistics(total_size, status_codes)
