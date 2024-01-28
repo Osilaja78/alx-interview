@@ -48,7 +48,8 @@ try:
             if code in status_codes.keys():
                 status_codes[code] += 1
             line_count += 1
-            if line_count % 10 == 0:
+            if line_count == 10:
                 print_statistics(total_size, status_codes)
+                line_count = 0
 finally:
     print_statistics(total_size, status_codes)
