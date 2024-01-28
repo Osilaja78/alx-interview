@@ -2,10 +2,10 @@
 """0-stats.py module"""
 
 import sys
-from typing import Tuple
+from typing import Tuple, Dict
 
 
-def print_statistics(total_size: int, status_codes: int) -> None:
+def print_statistics(total_size: int, status_codes: Dict[int, int]) -> None:
     """Prints file size and status code to stdout"""
 
     print(f"File size: {total_size}")
