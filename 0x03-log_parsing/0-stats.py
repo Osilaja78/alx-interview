@@ -57,5 +57,5 @@ try:
             if (line_count == 10):
                 print_statistics(status_codes, total_size)
                 line_count = 0
-except KeyboardInterrupt:
+finally:
     print_statistics(status_codes, total_size)
