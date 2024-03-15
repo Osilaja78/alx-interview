@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 """0-prime_game.py module"""
 
-from typing import List
 
-
-def isWinner(x: int, nums: List[int]) -> str:
+def isWinner(x, nums) -> str:
     """
     This function determines the winner of the game based on the
     number of rounds (x) and the initial set of numbers (nums).
