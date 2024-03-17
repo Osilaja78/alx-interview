@@ -3,6 +3,8 @@
 
 
 def isWinner(x, nums):
+    """Min function for gameplay"""
+
     def is_prime(n):
         if n <= 1:
             return False
@@ -18,6 +20,8 @@ def isWinner(x, nums):
         return True
 
     def generate_primes(n):
+        """Generate prime numbers"""
+
         primes = []
         for i in range(2, n + 1):
             if is_prime(i):
@@ -25,6 +29,8 @@ def isWinner(x, nums):
         return primes
 
     def can_player_win(n):
+        """Check if player wins"""
+
         primes = generate_primes(n)
         if len(primes) % 2 == 0:
             return "Maria"
