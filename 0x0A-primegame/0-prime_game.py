@@ -2,54 +2,47 @@
 """0-prime_game.py module"""
 
 
-def isWinner(x, nums) -> str:
-    """
-    This function determines the winner of the game based on the
-    number of rounds (x) and the initial set of numbers (nums).
+def isWinner(x, nums):
+    def is_prime(n):
+        if n <= 1:
+            return False
+        if n <= 3:
+            return True
+        if n % 2 == 0 or n % 3 == 0:
+            return False
+        i = 5
+        while i * i <= n:
+            if n % i == 0 or n % (i + 2) == 0:
+                return False
+            i += 6
+        return True
 
-    Args:
-        x: Number of rounds
-        nums: List of consecutive integers
+    def generate_primes(n):
+        primes = []
+        for i in range(2, n + 1):
+            if is_prime(i):
+                primes.append(i)
+        return primes
 
-    Returns:
-        str: Name of the winner ("Maria" or "Ben") or None if
-        winner cannot be determined
-    """
+    def can_player_win(n):
+        primes = generate_primes(n)
+        if len(primes) % 2 == 0:
+            return "Maria"
+        else:
+            return "Ben"
 
     maria_wins = 0
     ben_wins = 0
-
-    for _ in range(x):
-        if len(nums) == 1:
+    for i in range(x):
+        winner = can_player_win(nums[i])
+        if winner == "Maria":
+            maria_wins += 1
+        elif winner == "Ben":
             ben_wins += 1
-            continue
-
-    smallest_prime = next(num for num in nums if is_prime(num))
-
-    nums = [num for num in nums if num % smallest_prime != 0]
-
-    has_move_for_ben = any(is_prime(num) for num in nums)
-
-    if not has_move_for_ben:
-        maria_wins += 1
-    else:
-        ben_wins += 1
 
     if maria_wins > ben_wins:
         return "Maria"
-    elif maria_wins < ben_wins:
+    elif ben_wins > maria_wins:
         return "Ben"
     else:
         return None
-
-
-def is_prime(num: int) -> bool:
-    """
-    This helper function checks if a number is prime.
-    """
-    if num <= 1:
-        return False
-    for i in range(2, int(num**0.5) + 1):
-        if num % i == 0:
-            return False
-    return True
