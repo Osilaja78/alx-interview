@@ -32,9 +32,10 @@ def isWinner(x, nums):
             remaining_nums -= set(range(smallest_prime, n + 1, smallest_prime))
             scores[current_player] += 1
     current_player = 1 - current_player
-        
+
     if scores[0] > scores[1]:
         return "Maria"
     elif scores[0] < scores[1]:
         return "Ben"
-    else: return None
+    else:
+        return None
