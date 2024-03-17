@@ -3,52 +3,38 @@
 
 
 def isWinner(x, nums):
-    """Min function for gameplay"""
+    """Main function for gameplay"""
 
-    def is_prime(n):
-        if n <= 1:
-            return False
-        if n <= 3:
-            return True
-        if n % 2 == 0 or n % 3 == 0:
-            return False
-        i = 5
-        while i * i <= n:
-            if n % i == 0 or n % (i + 2) == 0:
-                return False
-            i += 6
-        return True
+    scores = [0, 0]
+    current_player = 0
+    remaining_nums = set(range(1, 10001))
 
-    def generate_primes(n):
-        """Generate prime numbers"""
+    primes = set()
 
-        primes = []
-        for i in range(2, n + 1):
-            if is_prime(i):
-                primes.append(i)
-        return primes
+    for num in range(2, 10001):
+        if num not in primes:
+            primes.add(num)
+            for multiple in range(num * 2, 10001, num):
+                primes.add(multiple)
 
-    def can_player_win(n):
-        """Check if player wins"""
-
-        primes = generate_primes(n)
-        if len(primes) % 2 == 0:
-            return "Maria"
-        else:
-            return "Ben"
-
-    maria_wins = 0
-    ben_wins = 0
     for i in range(x):
-        winner = can_player_win(nums[i])
-        if winner == "Maria":
-            maria_wins += 1
-        elif winner == "Ben":
-            ben_wins += 1
+        n = nums[i] if i < len(nums) else 10000
+        remaining_nums = remaining_nums - set(range(1, n + 1))
+        prime_nums = primes & remaining_nums
 
-    if maria_wins > ben_wins:
+        if not prime_nums:
+            if current_player == 0:
+                scores[current_player] += 1
+            else:
+                scores[current_player] += 1
+        else:
+            smallest_prime = min(prime_nums)
+            remaining_nums -= set(range(smallest_prime, n + 1, smallest_prime))
+            scores[current_player] += 1
+    current_player = 1 - current_player
+        
+    if scores[0] > scores[1]:
         return "Maria"
-    elif ben_wins > maria_wins:
+    elif scores[0] < scores[1]:
         return "Ben"
-    else:
-        return None
+    else: return None
